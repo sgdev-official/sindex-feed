@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ============================================================
+       BASIC / CHARSET / VIEWPORT
+  ============================================================ -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ============================================================
+       TITLE & CORE SEO META
+       NOTE: Replace all instances of "https://www.example.com"
+       below with your real root domain before deploying.
+  ============================================================ -->
+  <title>Content Hub — Latest Posts & Updates</title>
+  <meta name="description" content="Browse the latest posts and updates from our content hub, updated automatically as new articles are published.">
+  <meta name="keywords" content="content hub, blog feed, latest posts, articles, updates">
+  <meta name="author" content="Content Hub">
+
+  <!-- ============================================================
+       ROBOTS DIRECTIVES
+       Standard, honest crawl directives for a real content page.
+  ============================================================ -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+  <!-- ============================================================
+       CANONICAL URL
+  ============================================================ -->
+  <link rel="canonical" href="https://www.example.com/">
+
+  <!-- ============================================================
+       OPEN GRAPH (Facebook, LinkedIn, bots, etc.)
+  ============================================================ -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Content Hub — Latest Posts & Updates">
+  <meta property="og:description" content="Browse the latest posts and updates from our content hub, updated automatically as new articles are published.">
+  <meta property="og:url" content="https://www.example.com/">
+  <meta property="og:site_name" content="Content Hub">
+  <meta property="og:image" content="https://www.example.com/assets/og-cover.jpg">
+
+  <!-- ============================================================
+       TWITTER CARD
+  ============================================================ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Content Hub — Latest Posts & Updates">
+  <meta name="twitter:description" content="Browse the latest posts and updates from our content hub, updated automatically as new articles are published.">
+  <meta name="twitter:image" content="https://www.example.com/assets/og-cover.jpg">
+
+  <!-- ============================================================
+       BOOTSTRAP 5 (CDN)
+  ============================================================ -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- ============================================================
+       JSON-LD STRUCTURED DATA (Schema.org)
+       WebSite + CollectionPage describing this page as an index
+       of the site's own published content items.
+  ============================================================ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://www.example.com/#website",
+        "url": "https://www.example.com/",
+        "name": "Content Hub",
+        "description": "Browse the latest posts and updates from our content hub."
+      },
+      {
+        "@type": "CollectionPage",
+        "@id": "https://www.example.com/#collection",
+        "url": "https://www.example.com/",
+        "name": "Latest Posts & Updates",
+        "isPartOf": { "@id": "https://www.example.com/#website" },
+        "description": "An automatically updated collection of the site's most recently published posts."
+      }
+    ]
+  }
+  </script>
+
+  <!-- ============================================================
+       CUSTOM DARK THEME (GitHub / Vercel inspired)
+  ============================================================ -->
+  <style>
+    :root {
+      --bg-canvas: #0d1117;
+      --bg-surface: #161b22;
+      --bg-surface-hover: #1c2129;
+      --border-default: #30363d;
+      --text-primary: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #2f81f7;
+      --accent-soft: rgba(47, 129, 247, 0.12);
+      --success: #3fb950;
+      --warning: #d29922;
+      --danger: #f85149;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Hero */
+    .hero {
+      border-bottom: 1px solid var(--border-default);
+      padding: 4rem 0 3rem;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(47,129,247,0.08), transparent 45%),
+        var(--bg-canvas);
+    }
+    .hero h1 {
+      font-weight: 700;
+      font-size: clamp(1.9rem, 3.2vw, 2.75rem);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+    .hero p {
+      color: var(--text-muted);
+      max-width: 640px;
+      font-size: 1.05rem;
+    }
+
+    /* Feed */
+    .feed-section { padding: 2.5rem 0 4rem; }
+
+    .feed-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      padding: 1.1rem 1.25rem;
+      margin-bottom: 0.85rem;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+    .feed-card:hover {
+      border-color: #3d444d;
+      background-color: var(--bg-surface-hover);
+    }
+
+    .feed-link {
+      font-weight: 600;
+      font-size: 1rem;
+      word-break: break-word;
+    }
+
+    .feed-meta {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 0.35rem;
+    }
+
+    .status-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.28rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+    .status-published {
+      color: var(--success);
+      background-color: rgba(63, 185, 80, 0.12);
+      border-color: rgba(63, 185, 80, 0.3);
+    }
+    .status-scheduled {
+      color: var(--warning);
+      background-color: rgba(210, 153, 34, 0.12);
+      border-color: rgba(210, 153, 34, 0.3);
+    }
+    .status-draft {
+      color: var(--text-muted);
+      background-color: rgba(139, 148, 158, 0.12);
+      border-color: rgba(139, 148, 158, 0.3);
+    }
+
+    /* Loading / error states */
+    .state-panel {
+      border: 1px dashed var(--border-default);
+      border-radius: 8px;
+      padding: 3rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    footer {
+      border-top: 1px solid var(--border-default);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      padding: 2rem 0;
+    }
+
+    /* Respect reduced-motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      .feed-card { transition: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================================
+       HERO HEADER
+  ============================================================ -->
+  <header class="hero">
+    <div class="container">
+      <h1>Content Hub — Latest Posts</h1>
+      <p>A live, automatically updated feed of the most recently published articles on this site.</p>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       MAIN FEED
+  ============================================================ -->
+  <main class="container feed-section">
+    <section aria-labelledby="feed-heading">
+      <h2 id="feed-heading" class="visually-hidden">Recently published posts</h2>
+
+      <!-- Loading state -->
+      <div id="loading-state" class="state-panel">
+        <div class="spinner-border text-light mb-3" role="status">
+          <span class="visually-hidden">Loading…</span>
+        </div>
+        <div>Loading the latest posts…</div>
+      </div>
+
+      <!-- Error state (hidden by default) -->
+      <div id="error-state" class="state-panel d-none">
+        <div class="mb-2">We couldn't load the feed right now.</div>
+        <button id="retry-btn" class="btn btn-outline-light btn-sm">Try again</button>
+      </div>
+
+      <!-- Rendered feed items go here -->
+      <div id="feed-container" role="list"></div>
+    </section>
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer>
+    <div class="container">
+      &copy; <span id="year"></span> Content Hub. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- ============================================================
+       APP LOGIC
+       Fetches the site's own published content items from a
+       Google Apps Script Web App JSON API and renders them.
+       Expected JSON shape (array of objects):
+       [{ "url": "...", "title": "...", "publishedAt": "ISO-8601 string", "status": "published|scheduled|draft" }, ...]
+  ============================================================ -->
+  <script>
+    // Replace with your deployed Google Apps Script Web App URL.
+    const GOOGLE_SHEETS_API_URL = "YOUR_APPS_SCRIPT_WEBAPP_URL";
+
+    const MAX_ITEMS = 30;
+
+    const feedContainer = document.getElementById("feed-container");
+    const loadingState = document.getElementById("loading-state");
+    const errorState = document.getElementById("error-state");
+    const retryBtn = document.getElementById("retry-btn");
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    function statusBadgeClass(status) {
+      switch ((status || "").toLowerCase()) {
+        case "published": return "status-published";
+        case "scheduled": return "status-scheduled";
+        default: return "status-draft";
+      }
+    }
+
+    function formatTimestamp(isoString) {
+      const date = new Date(isoString);
+      if (isNaN(date.getTime())) return "Unknown date";
+      return date.toLocaleString(undefined, {
+        year: "numeric", month: "short", day: "numeric",
+        hour: "2-digit", minute: "2-digit"
+      });
+    }
+
+    // Basic escaping to avoid injecting raw HTML from API data.
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str ?? "";
+      return div.innerHTML;
+    }
+
+    function renderFeed(items) {
+      feedContainer.innerHTML = "";
+
+      if (!items.length) {
+        feedContainer.innerHTML = `<div class="state-panel">No posts published yet.</div>`;
+        return;
+      }
+
+      const sorted = [...items]
+        .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+        .slice(0, MAX_ITEMS);
+
+      sorted.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "feed-card d-flex justify-content-between align-items-start flex-wrap gap-2";
+        card.setAttribute("role", "listitem");
+
+        card.innerHTML = `
+          <div>
+            <a class="feed-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">
+              ${escapeHtml(item.title || item.url)}
+            </a>
+            <div class="feed-meta">Published ${formatTimestamp(item.publishedAt)}</div>
+          </div>
+          <span class="status-badge ${statusBadgeClass(item.status)}">
+            ${escapeHtml(item.status || "draft")}
+          </span>
+        `;
+
+        feedContainer.appendChild(card);
+      });
+    }
+
+    async function loadFeed() {
+      loadingState.classList.remove("d-none");
+      errorState.classList.add("d-none");
+      feedContainer.innerHTML = "";
+
+      try {
+        const response = await fetch(GOOGLE_SHEETS_API_URL);
+        if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+
+        const data = await response.json();
+        loadingState.classList.add("d-none");
+        renderFeed(Array.isArray(data) ? data : (data.items || []));
+      } catch (err) {
+        console.error("Failed to load feed:", err);
+        loadingState.classList.add("d-none");
+        errorState.classList.remove("d-none");
+      }
+    }
+
+    retryBtn.addEventListener("click", loadFeed);
+
+    document.addEventListener("DOMContentLoaded", loadFeed);
+  </script>
+</body>
+</html>
