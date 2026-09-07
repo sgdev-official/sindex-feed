@@ -3,211 +3,119 @@
 <head>
   <meta name="google-site-verification" content="6YaAi4Kb5HBAYj9lBmUXSq0bu78EUs2J90iOlof5yok" />
   <meta name="msvalidate.01" content="3D2484748725A52BC95CAB3C2187882D" />
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>S-Indexer Network Feed</title>
-<meta name="description" content="A live dashboard of the latest items added to the S-Indexer network feed.">
-<meta name="robots" content="index, follow">
-<style>
-  :root{
-    --bg-canvas:#0d1117;
-    --bg-surface:#161b22;
-    --bg-surface-hover:#1c2129;
-    --border-default:#30363d;
-    --text-primary:#e6edf3;
-    --text-muted:#8b949e;
-    --accent:#2f81f7;
-    --success:#3fb950;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{
-    background:var(--bg-canvas);
-    color:var(--text-primary);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    line-height:1.6;
-  }
-  a{color:var(--accent);text-decoration:none;}
-  a:hover{text-decoration:underline;}
-  .wrap{max-width:1100px;margin:0 auto;padding:0 1.25rem;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S-Indexer Network Feed</title>
+  <meta name="description" content="A live dashboard of the latest items added to the S-Indexer network feed.">
+  <meta name="robots" content="index, follow">
+  <style>
+    /* Fast Crawling Ultra-Light CSS (< 4kb) */
+    :root {
+      --bg: #0d1117;
+      --card: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #2f81f7;
+      --success: #3fb950;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; line-height: 1.5; padding: 1rem; }
+    .wrap { max-width: 1000px; margin: 0 auto; }
+    header { padding: 1.2rem 0; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; }
+    h1 { font-size: 1.5rem; }
+    p { color: var(--muted); font-size: 0.88rem; }
+    
+    /* Yandex Generator Box */
+    .yandex-box { background: var(--card); border: 1px solid var(--border); padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; }
+    .yandex-box input { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem; border-radius: 4px; width: 60%; margin-right: 0.5rem; }
+    .btn { background: var(--accent); color: #fff; border: 0; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-weight: 600; }
+    .btn:hover { opacity: 0.9; }
 
-  header{
-    border-bottom:1px solid var(--border-default);
-    padding:3rem 0 2.25rem;
-    background:radial-gradient(circle at 15% 0%, rgba(47,129,247,.08), transparent 45%), var(--bg-canvas);
-  }
-  header h1{font-size:clamp(1.75rem,3vw,2.5rem);letter-spacing:-.02em;margin-bottom:.4rem;}
-  header p{color:var(--text-muted);}
-
-  main{padding:2.5rem 0 4rem;}
-
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-    gap:.85rem;
-  }
-
-  .card{
-    background:var(--bg-surface);
-    border:1px solid var(--border-default);
-    border-radius:8px;
-    padding:1.1rem 1.25rem;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    transition:border-color .15s ease, background-color .15s ease;
-  }
-  .card:hover{border-color:#3d444d;background:var(--bg-surface-hover);}
-
-  .card a{
-    display:block;
-    font-weight:600;
-    font-size:.98rem;
-    word-break:break-word;
-    margin-bottom:.5rem;
-  }
-  .meta{color:var(--text-muted);font-size:.82rem;}
-
-  .badge{
-    display:inline-block;
-    margin-top:.75rem;
-    font-size:.72rem;
-    font-weight:600;
-    padding:.28rem .6rem;
-    border-radius:999px;
-    border:1px solid rgba(63,185,80,.3);
-    color:var(--success);
-    background:rgba(63,185,80,.12);
-    width:fit-content;
-  }
-
-  .state-panel{
-    border:1px dashed var(--border-default);
-    border-radius:8px;
-    padding:3rem 1.5rem;
-    text-align:center;
-    color:var(--text-muted);
-  }
-  .hidden{display:none;}
-
-  .spinner{
-    width:28px;height:28px;
-    border:3px solid var(--border-default);
-    border-top-color:var(--accent);
-    border-radius:50%;
-    margin:0 auto 1rem;
-    animation:spin .8s linear infinite;
-  }
-  @keyframes spin{to{transform:rotate(360deg);}}
-
-  .retry-btn{
-    background:transparent;
-    border:1px solid var(--border-default);
-    color:var(--text-primary);
-    padding:.45rem 1rem;
-    border-radius:6px;
-    cursor:pointer;
-    font-size:.85rem;
-  }
-  .retry-btn:hover{border-color:var(--accent);color:var(--accent);}
-
-  footer{
-    border-top:1px solid var(--border-default);
-    color:var(--text-muted);
-    font-size:.85rem;
-    padding:2rem 0;
-  }
-
-  @media (prefers-reduced-motion:reduce){
-    .card{transition:none;}
-    .spinner{animation:none;}
-  }
-</style>
+    /* Feed Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 0.85rem; word-break: break-all; }
+    .card a { color: var(--accent); font-weight: 600; text-decoration: none; display: block; margin-bottom: 0.4rem; }
+    .card a:hover { text-decoration: underline; }
+    .meta { color: var(--muted); font-size: 0.75rem; }
+    .badge { display: inline-block; font-size: 0.65rem; padding: 0.15rem 0.4rem; border-radius: 4px; color: var(--success); background: rgba(63,185,80,0.15); margin-top: 0.4rem; }
+    
+    .state { text-align: center; color: var(--muted); padding: 2rem 0; }
+    .hidden { display: none; }
+  </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap">
+<div class="wrap">
+  <header>
     <h1>S-Indexer Network Feed</h1>
-    <p>Live view of the latest items added to your network feed.</p>
+    <p>Fast Indexing Node & Live URL Stream</p>
+  </header>
+
+  <!-- Yandex Key Generator Box (Bug Fixed) -->
+  <div class="yandex-box">
+    <p style="margin-bottom:0.5rem; font-weight:600;">Yandex Bot Authentication Key</p>
+    <div style="display:flex;">
+      <input type="text" id="yandex-key-input" readonly placeholder="Click generate for new key..." />
+      <button type="button" class="btn" id="gen-key-btn">Generate Key</button>
+    </div>
+    <span id="key-status" class="meta" style="color:var(--success); display:none; margin-top:0.4rem;">Key Generated & Copied to Clipboard!</span>
   </div>
-</header>
 
-<main class="wrap">
-  <section aria-labelledby="feed-heading">
-    <h2 id="feed-heading" class="hidden">Latest feed items</h2>
-
-    <div id="loading-state" class="state-panel">
-      <div class="spinner"></div>
-      <div>Loading the latest feed items…</div>
+  <main>
+    <div id="loading-state" class="state">Connecting to DuckDNS Feed & Vercel KV...</div>
+    <div id="error-state" class="state hidden">
+      <p>Failed to load feed stream.</p>
+      <button type="button" class="btn" id="retry-btn" style="margin-top:0.5rem;">Retry</button>
     </div>
-
-    <div id="error-state" class="state-panel hidden">
-      <div style="margin-bottom:.75rem;">We couldn't load the feed right now.</div>
-      <button id="retry-btn" class="retry-btn">Retry</button>
-    </div>
-
-    <div id="feed-container" class="grid" role="list"></div>
-  </section>
-</main>
-
-<footer>
-  <div class="wrap">&copy; <span id="year"></span> S-Indexer Network.</div>
-</footer>
+    <div id="feed-container" class="grid"></div>
+  </main>
+</div>
 
 <script>
-  // Deployed Google Apps Script Web App endpoint.
-  const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbzG1fAg6CKkbsOLaNgGRsuqvYoyg8tva6VwPQusEfzsISyJXmVchP_72Vjj9_jY3zATEQ/exec";
-
-  const MAX_ITEMS = 30;
+  // 🎯 তোর DuckDNS CDN Feed Endpoint সরাসরি বসিয়ে দেওয়া হয়েছে
+  const API_FEED_URL = "https://cdn.sindex.duckdns.org/api/v1/feed";
 
   const feedContainer = document.getElementById("feed-container");
   const loadingState = document.getElementById("loading-state");
   const errorState = document.getElementById("error-state");
   const retryBtn = document.getElementById("retry-btn");
+  const genKeyBtn = document.getElementById("gen-key-btn");
+  const yandexInput = document.getElementById("yandex-key-input");
+  const keyStatus = document.getElementById("key-status");
 
-  document.getElementById("year").textContent = new Date().getFullYear();
-
-  // Escape untrusted feed data before inserting into the DOM.
   function escapeHtml(str) {
     const div = document.createElement("div");
-    div.textContent = str ?? "";
+    div.textContent = str || "";
     return div.innerHTML;
   }
 
-  function formatTimestamp(raw) {
-    if (!raw) return "Unknown date";
-    const date = new Date(raw);
-    if (isNaN(date.getTime())) return escapeHtml(String(raw));
-    return date.toLocaleString(undefined, {
-      year: "numeric", month: "short", day: "numeric",
-      hour: "2-digit", minute: "2-digit"
+  // Yandex Key Generator (No submit bug, auto clipboard copy)
+  genKeyBtn.addEventListener("click", () => {
+    const randomKey = "YNDX-" + Math.random().toString(36).substring(2, 10).toUpperCase() + "-" + Date.now().toString(36).toUpperCase();
+    yandexInput.value = randomKey;
+    
+    navigator.clipboard.writeText(randomKey).then(() => {
+      keyStatus.style.display = "block";
+      setTimeout(() => { keyStatus.style.display = "none"; }, 3000);
     });
-  }
+  });
 
-  function renderFeed(items) {
+  function renderFeed(urls) {
     feedContainer.innerHTML = "";
-
-    if (!items.length) {
-      feedContainer.innerHTML = `<div class="state-panel">No items yet.</div>`;
+    if (!urls || !urls.length) {
+      feedContainer.innerHTML = `<div class="state">No URLs queued in Vercel KV yet.</div>`;
       return;
     }
 
-    const sorted = [...items].reverse().slice(0, MAX_ITEMS);
-
-    sorted.forEach(item => {
-      const url = item.url || "";
-      const safeUrl = escapeHtml(url) || "#";
-      const displayUrl = url ? escapeHtml(url) : "No URL provided";
-
+    urls.forEach(rawUrl => {
+      const safeUrl = escapeHtml(rawUrl);
       const card = document.createElement("div");
       card.className = "card";
-      card.setAttribute("role", "listitem");
       card.innerHTML = `
-        <div>
-          <a href="${safeUrl}" target="_blank" rel="dofollow index follow">🔗 ${displayUrl}</a>
-          <div class="meta">Dispatched: ${formatTimestamp(item.timestamp)}</div>
-        </div>
-        <span class="badge">Queued</span>
+        <a href="${safeUrl}" target="_blank" rel="dofollow index follow">🔗 ${safeUrl}</a>
+        <div class="meta">Status: Active Node Entry</div>
+        <span class="badge">Queued in KV</span>
       `;
       feedContainer.appendChild(card);
     });
@@ -219,13 +127,14 @@
     feedContainer.innerHTML = "";
 
     try {
-      const response = await fetch(GOOGLE_SHEETS_API_URL);
-      if (!response.ok) throw new Error(`Request failed: ${response.status}`);
-      const data = await response.json();
+      const res = await fetch(API_FEED_URL);
+      if (!res.ok) throw new Error("Network response not OK");
+      const data = await res.json();
+      
       loadingState.classList.add("hidden");
-      renderFeed(Array.isArray(data) ? data : (data.items || []));
+      renderFeed(data.urls || []);
     } catch (err) {
-      console.error("Failed to load feed:", err);
+      console.error("Feed error:", err);
       loadingState.classList.add("hidden");
       errorState.classList.remove("hidden");
     }
