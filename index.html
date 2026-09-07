@@ -6,41 +6,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>S-Indexer Network Feed</title>
-  <meta name="description" content="A live dashboard of the latest items added to the S-Indexer network feed.">
+  <meta name="description" content="Live URL feed for S-Indexer network nodes.">
   <meta name="robots" content="index, follow">
   <style>
-    /* Fast Crawling Ultra-Light CSS (< 4kb) */
-    :root {
-      --bg: #0d1117;
-      --card: #161b22;
-      --border: #30363d;
-      --text: #e6edf3;
-      --muted: #8b949e;
-      --accent: #2f81f7;
-      --success: #3fb950;
-    }
+    /* Ultra-Fast Black & Green Minimal Theme */
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; line-height: 1.5; padding: 1rem; }
-    .wrap { max-width: 1000px; margin: 0 auto; }
-    header { padding: 1.2rem 0; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; }
-    h1 { font-size: 1.5rem; }
-    p { color: var(--muted); font-size: 0.88rem; }
+    body { background: #000; color: #00ff66; font-family: monospace; padding: 1rem; line-height: 1.4; }
+    .wrap { max-width: 900px; margin: 0 auto; }
+    header { border-bottom: 1px solid #003311; padding-bottom: 0.5rem; margin-bottom: 1rem; }
+    h1 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; }
+    p { color: #009933; font-size: 0.8rem; }
     
-    /* Yandex Generator Box */
-    .yandex-box { background: var(--card); border: 1px solid var(--border); padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; }
-    .yandex-box input { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem; border-radius: 4px; width: 60%; margin-right: 0.5rem; }
-    .btn { background: var(--accent); color: #fff; border: 0; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-weight: 600; }
-    .btn:hover { opacity: 0.9; }
-
-    /* Feed Grid */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 0.85rem; word-break: break-all; }
-    .card a { color: var(--accent); font-weight: 600; text-decoration: none; display: block; margin-bottom: 0.4rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.5rem; }
+    .card { background: #050505; border: 1px solid #003311; padding: 0.6rem; word-break: break-all; }
+    .card a { color: #00ff66; text-decoration: none; font-weight: bold; display: block; margin-bottom: 0.2rem; }
     .card a:hover { text-decoration: underline; }
-    .meta { color: var(--muted); font-size: 0.75rem; }
-    .badge { display: inline-block; font-size: 0.65rem; padding: 0.15rem 0.4rem; border-radius: 4px; color: var(--success); background: rgba(63,185,80,0.15); margin-top: 0.4rem; }
+    .meta { color: #008822; font-size: 0.7rem; }
     
-    .state { text-align: center; color: var(--muted); padding: 2rem 0; }
+    .state { text-align: center; color: #008822; padding: 2rem 0; font-size: 0.9rem; }
+    .btn { background: #002200; color: #00ff66; border: 1px solid #005511; padding: 0.4rem 0.8rem; cursor: pointer; font-family: monospace; }
+    .btn:hover { background: #004400; }
     .hidden { display: none; }
   </style>
 </head>
@@ -49,40 +34,27 @@
 <div class="wrap">
   <header>
     <h1>S-Indexer Network Feed</h1>
-    <p>Fast Indexing Node & Live URL Stream</p>
+    <p>> Live Node URL Stream</p>
   </header>
 
-  <!-- Yandex Key Generator Box (Bug Fixed) -->
-  <div class="yandex-box">
-    <p style="margin-bottom:0.5rem; font-weight:600;">Yandex Bot Authentication Key</p>
-    <div style="display:flex;">
-      <input type="text" id="yandex-key-input" readonly placeholder="Click generate for new key..." />
-      <button type="button" class="btn" id="gen-key-btn">Generate Key</button>
-    </div>
-    <span id="key-status" class="meta" style="color:var(--success); display:none; margin-top:0.4rem;">Key Generated & Copied to Clipboard!</span>
-  </div>
-
   <main>
-    <div id="loading-state" class="state">Connecting to DuckDNS Feed & Vercel KV...</div>
+    <div id="loading-state" class="state">> Connecting to Vercel KV...</div>
     <div id="error-state" class="state hidden">
-      <p>Failed to load feed stream.</p>
-      <button type="button" class="btn" id="retry-btn" style="margin-top:0.5rem;">Retry</button>
+      <p>[!] Failed to load feed stream.</p>
+      <button type="button" class="btn" id="retry-btn" style="margin-top:0.5rem;">[ Retry ]</button>
     </div>
     <div id="feed-container" class="grid"></div>
   </main>
 </div>
 
 <script>
-  // 🎯 তোর DuckDNS CDN Feed Endpoint সরাসরি বসিয়ে দেওয়া হয়েছে
-  const API_FEED_URL = "https://cdn.sindex.duckdns.org/api/v1/feed";
+  // 🎯 Direct Render Backend Endpoint (/v1 ছাড়া)
+  const API_FEED_URL = "https://s-indexing-tool-bakend.onrender.com/feed";
 
   const feedContainer = document.getElementById("feed-container");
   const loadingState = document.getElementById("loading-state");
   const errorState = document.getElementById("error-state");
   const retryBtn = document.getElementById("retry-btn");
-  const genKeyBtn = document.getElementById("gen-key-btn");
-  const yandexInput = document.getElementById("yandex-key-input");
-  const keyStatus = document.getElementById("key-status");
 
   function escapeHtml(str) {
     const div = document.createElement("div");
@@ -90,21 +62,10 @@
     return div.innerHTML;
   }
 
-  // Yandex Key Generator (No submit bug, auto clipboard copy)
-  genKeyBtn.addEventListener("click", () => {
-    const randomKey = "YNDX-" + Math.random().toString(36).substring(2, 10).toUpperCase() + "-" + Date.now().toString(36).toUpperCase();
-    yandexInput.value = randomKey;
-    
-    navigator.clipboard.writeText(randomKey).then(() => {
-      keyStatus.style.display = "block";
-      setTimeout(() => { keyStatus.style.display = "none"; }, 3000);
-    });
-  });
-
   function renderFeed(urls) {
     feedContainer.innerHTML = "";
     if (!urls || !urls.length) {
-      feedContainer.innerHTML = `<div class="state">No URLs queued in Vercel KV yet.</div>`;
+      feedContainer.innerHTML = `<div class="state">> No URLs queued in KV.</div>`;
       return;
     }
 
@@ -113,9 +74,8 @@
       const card = document.createElement("div");
       card.className = "card";
       card.innerHTML = `
-        <a href="${safeUrl}" target="_blank" rel="dofollow index follow">🔗 ${safeUrl}</a>
-        <div class="meta">Status: Active Node Entry</div>
-        <span class="badge">Queued in KV</span>
+        <a href="${safeUrl}" target="_blank" rel="dofollow index follow">> ${safeUrl}</a>
+        <div class="meta">Status: Queued</div>
       `;
       feedContainer.appendChild(card);
     });
@@ -128,7 +88,7 @@
 
     try {
       const res = await fetch(API_FEED_URL);
-      if (!res.ok) throw new Error("Network response not OK");
+      if (!res.ok) throw new Error("Network error");
       const data = await res.json();
       
       loadingState.classList.add("hidden");
