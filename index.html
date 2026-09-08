@@ -48,7 +48,7 @@
 </div>
 
 <script>
-  // 🎯 Direct Render Backend Endpoint (/v1 ছাড়া)
+  // 🎯 Direct Render Backend Endpoint
   const API_FEED_URL = "https://s-indexing-tool-bakend.onrender.com/feed";
 
   const feedContainer = document.getElementById("feed-container");
@@ -62,6 +62,23 @@
     return div.innerHTML;
   }
 
+  // 🛠️ URL Normalizer: Relative Link & 404 Bug প্রতিরোধ করবে
+  function normalizeUrl(rawUrl) {
+    if (!rawUrl) return null;
+    let clean = rawUrl.trim();
+
+    // অসম্পূর্ণ বা ফালতু ইনপুট ফিল্টার
+    if (['http:', 'https:', 'http://', 'https://'].includes(clean.toLowerCase())) {
+      return null;
+    }
+
+    // প্রোটোকল না থাকলে বাধ্যতামূলকভাবে https:// জুড়ে দেবে
+    if (!clean.startsWith("http://") && !clean.startsWith("https://")) {
+      clean = "https://" + clean;
+    }
+    return clean;
+  }
+
   function renderFeed(urls) {
     feedContainer.innerHTML = "";
     if (!urls || !urls.length) {
@@ -70,11 +87,15 @@
     }
 
     urls.forEach(rawUrl => {
-      const safeUrl = escapeHtml(rawUrl);
+      const formattedUrl = normalizeUrl(rawUrl);
+      // যদি ডাটাবেসে ভুল ইনপুট থাকে, তা রেন্ডার না করে স্কিপ করবে
+      if (!formattedUrl) return;
+
+      const safeHref = escapeHtml(formattedUrl);
       const card = document.createElement("div");
       card.className = "card";
       card.innerHTML = `
-        <a href="${safeUrl}" target="_blank" rel="dofollow index follow">> ${safeUrl}</a>
+        <a href="${safeHref}" target="_blank" rel="dofollow index follow">> ${safeHref}</a>
         <div class="meta">Status: Queued</div>
       `;
       feedContainer.appendChild(card);
